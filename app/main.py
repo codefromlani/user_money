@@ -2,6 +2,8 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 import time
 
+from .api.routes.auth import router as auth_router
+
 
 app = FastAPI()
 
@@ -23,6 +25,7 @@ async def log_middleware(request: Request, call_next):
     print(f"Request: {request.method} {request.url} | Duration: {duration:.4f} seconds")
     return response
 
+app.include_router(auth_router)
 
 @app.get('/')
 def home():
