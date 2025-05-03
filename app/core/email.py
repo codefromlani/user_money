@@ -50,7 +50,7 @@ async def send_reset_email(email: EmailStr, reset_token: str):
     message["FROM"] = EMAIL_USERNAME
     message["TO"] = email
     message["Subject"] = "Password Reset Request"
-    reset_link = f"http://localhost:8000/auth/reset-password?token={reset_token}"
+    reset_link = f"http://localhost:8000/auth/password-reset/verify?reset_token={reset_token}"
     message.add_alternative(
     f"""
 <html>
