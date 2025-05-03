@@ -5,6 +5,7 @@ from pydantic import EmailStr
 from ...schemas.user import UserCreate, Token, NewPassword
 from ...services.auth import create_user, get_user_by_email, resend_verification_email, generate_password_reset, reset_user_password
 from ...core.security import verify_password, create_access_token, verify_user
+from ...database import users_collection
 
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -58,6 +59,16 @@ async def request_password_reset(email: EmailStr):
     raise HTTPException(
         status_code=status.HTTP_400_BAD_REQUEST,
         detail="Invalid email or unverified account"
+    )
+
+@router.get("/password-reset/verify")
+async def verify_reset_token(reset_token: str):
+    user_data = await users_collection.find_one({"reset_token": reset_token})
+    if user_data:
+        return {"message": "Password reset token verified successfully"}
+    raise HTTPException(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail="Invalid verification token"
     )
 
 @router.post("/password-reset/confirm")
