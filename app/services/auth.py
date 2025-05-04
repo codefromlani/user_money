@@ -47,6 +47,7 @@ async def create_user(email: EmailStr, password: str, full_name: str, phone_numb
 async def get_user_by_email(email: EmailStr) -> Optional[User]:
     user_data = await users_collection.find_one({"email": email})
     if user_data:
+        user_data["id"] = str(user_data["_id"])
         return User(**user_data)
     return None
 
