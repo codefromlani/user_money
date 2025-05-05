@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 import time
 
 from .api.routes.auth import router as auth_router
+from .api.routes.account import router as account_router
+from .api.routes.transaction import router as transaction_router
 
 
 app = FastAPI()
@@ -26,6 +28,8 @@ async def log_middleware(request: Request, call_next):
     return response
 
 app.include_router(auth_router)
+app.include_router(account_router)
+app.include_router(transaction_router)
 
 @app.get('/')
 def home():
