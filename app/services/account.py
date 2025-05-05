@@ -2,6 +2,7 @@ from fastapi import HTTPException, status, Depends
 from typing import Literal
 from datetime import datetime
 from bson import ObjectId
+from bson.decimal128 import Decimal128
 import random
 import string
 
@@ -71,6 +72,10 @@ async def get_user_account(user_id: str) -> Account:
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Account not found"
         )
+    
+    if isinstance(account_data.get("balance"), Decimal128):
+        account_data["balance"] = account_data["balance"].to_decimal()
+    account_data['id'] = str(account_data['_id']) 
     return Account(**account_data)
 
 async def get_user_balance(user_id: str) -> float:
