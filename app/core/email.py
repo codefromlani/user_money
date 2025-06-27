@@ -8,6 +8,7 @@ EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")
 EMAIL_PORT = int(os.getenv("EMAIL_PORT", "465"))
 EMAIL_USERNAME= os.getenv("EMAIL_USERNAME")
 EMAIL_PASSWORD= os.getenv("EMAIL_PASSWORD")
+BASE_URL = os.getenv("BASE_URL", "http://localhost:8000")
 
 
 async def send_verification_email(email: EmailStr, token: str):
@@ -15,7 +16,7 @@ async def send_verification_email(email: EmailStr, token: str):
     message["FROM"] = EMAIL_USERNAME
     message["TO"] = email
     message["Subject"] = "Verify your email address"
-    verification_url = f"http://localhost:8000/auth/verify?token={token}"
+    verification_url = f"{BASE_URL}/auth/verify?token={token}"
     message.add_alternative(
     f"""
 <html>
@@ -25,7 +26,7 @@ async def send_verification_email(email: EmailStr, token: str):
     <p><a href="{verification_url}">Verify Email</a></p>
     <p>If you didn’t request this, you can ignore this email.</p>
     <br>
-    <p>Best regards,<br>Your App Team</p>
+    <p>Best regards,<br>User Money</p>
   </body>
 </html>
 """,
@@ -50,7 +51,7 @@ async def send_reset_email(email: EmailStr, reset_token: str):
     message["FROM"] = EMAIL_USERNAME
     message["TO"] = email
     message["Subject"] = "Password Reset Request"
-    reset_link = f"http://localhost:8000/auth/password-reset/verify?reset_token={reset_token}"
+    reset_link = f"{BASE_URL}/auth/password-reset/verify?reset_token={reset_token}"
     message.add_alternative(
     f"""
 <html>
@@ -61,7 +62,7 @@ async def send_reset_email(email: EmailStr, reset_token: str):
     <p><a href="{reset_link}">Reset Password</a></p>
     <p>If you didn’t request this, you can ignore this email.</p>
     <br>
-    <p>Best regards,<br>Your App Team</p>
+    <p>Best regards,<br>User Money</p>
   </body>
 </html>
 """,
